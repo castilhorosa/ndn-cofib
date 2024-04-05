@@ -28,22 +28,7 @@ public class CAD {
         this._output_ports = Port.DEFAULT;
         this._hs = "0000000000";
     }
-
-    /*
-    public CAD(boolean _continue, boolean _end_prefix, boolean _confliting, byte _position, byte _output_ports, String _hs) {
-        this._continue = _continue;
-        this._end_prefix = _end_prefix;
-        this._confliting = _confliting;
-        this._position = _position;
-        this._output_ports = _output_ports;
-        if (_hs.length() == 10) {
-            this._hs = _hs;
-        } else {
-            System.out.println("Error in CAD constructor. hs parameter should be 10-bit long.");
-            System.exit(0);
-        }
-    }*/
-
+    
     public void setHs(String _hs) {
         if (_hs.length() == 10) {
             this._hs = _hs;
