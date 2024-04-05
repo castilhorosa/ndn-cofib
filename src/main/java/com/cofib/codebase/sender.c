@@ -93,92 +93,20 @@ int main(int a, char *args[]){
         	int count=0;
         	size_t bytesRead;
         	do {
-        	    // Record the start time
-                    //gettimeofday(&start_time, NULL);
         	    // Read 2 bytes from the file
                     bytesRead = fread(&payload_size, 1, sizeof(payload_size), traffic);
-                    // Record the end time
-                    //gettimeofday(&end_time, NULL);
-                    // Calculate the elapsed time in milliseconds
-                    //unsigned long long start = (start_time.tv_sec * 1000000 + start_time.tv_usec);
-                    //unsigned long long end = (end_time.tv_sec * 1000000 + end_time.tv_usec);
-
-                    //elapsed_time = end-start;
-                    //printf("time to read a packet from file us: %ld\n", elapsed_time);
-		    if(bytesRead>0){
-		        //count++;
+                    if(bytesRead>0){
 		        payload_size = ntohs(payload_size);
-
-		        //printing the ethernet header
-		        //printf("pkt %d, len %d: \n\t", count, 14+payload_size);
-		        //for(int i=0; i<14; i++)
-		    	//    printf("0x%.2x ", header[i]);
-		    	//printf("\n\t");
-
+		    
 		    	payload = (uint8_t *)malloc(payload_size);
 		    	if(payload != NULL) {
-
-		    	    // Record the start time
-                            //gettimeofday(&start_time, NULL);
 		    	    fread(payload, 1, payload_size, traffic);
-		    	    // Record the end time
-                            //gettimeofday(&end_time, NULL);
-                             // Calculate the elapsed time in microseconds
-                            //start = (start_time.tv_sec * 1000000 + start_time.tv_usec);
-                            //end = (end_time.tv_sec * 1000000 + end_time.tv_usec);
-
-                            //elapsed_time = end-start;
-
-                            //printf("time to read a packet from file us: %ld\n", elapsed_time);
-
-
-		    	    //printing the packet payload
-		    	    /*int col=0;
-		    	    for(int i=0; i<payload_size; i++) {
-		    	       if(col < 14) {
-		    	           printf("0x%.2x ", payload[i]);
-		    	           col++;
-		    	       }
-		    	       else {
-		    	           col=0;
-		    	           printf("\n\t");
-		    	       }
-		    	    }*/
-
-
-
-		    	    // Record the start time
-                            //gettimeofday(&start_time, NULL);
-
-		    	        send_ethernet_frame(sock_s, header, payload, payload_size);
-
-
-		    	    // Record the end time
-                            //gettimeofday(&end_time, NULL);
-                             // Calculate the elapsed time in microseconds
-                            //start = (start_time.tv_sec * 1000000 + start_time.tv_usec);
-                            //end = (end_time.tv_sec * 1000000 + end_time.tv_usec);
-
-                            //elapsed_time = end-start;
-
-                            //printf("time to send packet in us: %ld\n", elapsed_time);
-		    	    count++;
+    	    	            send_ethernet_frame(sock_s, header, payload, payload_size);
+                            count++;
 		    	    
 		    	    if(count==160000)
 		    	        break;
-
-		    	    //int x = usleep(time_interval);
-		    	    //if(x == -1){
-		    	    //	printf("Error when calling ussleep function..");
-		    	    //	return 0;
-		    	    //}
-		    	    //getchar();
-
-
-                            //if(nanosleep(&time1, NULL) < 0 ) {
-                            //    printf("Nano sleep system call failed \n");
-                            //    return -1;
-                            //}
+	    	    
 		    	} else {
 		    	    printf("Error when allocating memory...\n");
 		    	    fclose(traffic);
@@ -203,11 +131,7 @@ void packet_handler(u_char *args, const struct pcap_pkthdr *header, const u_char
 
 void send_ethernet_frame(int sock_s, uint8_t *ether_header, uint8_t *payload, uint16_t payload_size) {
 
-        //struct timeval start_time, end_time;
-        //long elapsed_time;
-
-
-	      struct ifreq if_index;
+        struct ifreq if_index;
         struct sockaddr_ll socket_address;
 
         memset(&if_index, 0, sizeof(struct ifreq));
@@ -229,26 +153,11 @@ void send_ethernet_frame(int sock_s, uint8_t *ether_header, uint8_t *payload, ui
 	      memcpy(sendbuf, ether_header, 14);
         memcpy(sendbuf+14, payload, payload_size);
 
-	// Record the start time
-        //gettimeofday(&start_time, NULL);
-        int status = sendto(sock_s, sendbuf, sizeof(sendbuf), 0, (struct sockaddr*)&socket_address, sizeof(struct sockaddr_ll));
-        //do_some_task(247500);  2000 pps`
-				do_some_task(260000);
-
-        // Record the end time
-        //gettimeofday(&end_time, NULL);
-        // Calculate the elapsed time in milliseconds
-        //unsigned long long start = (start_time.tv_sec * 1000000 + start_time.tv_usec);
-        //unsigned long long end = (end_time.tv_sec * 1000000 + end_time.tv_usec);
-
-        //elapsed_time = end-start;
-        //printf("time to send a packet using the sendto function in us: %ld\n", elapsed_time);
-
-        if(status < 0)
-        {
-                printf("Failed\n");
-                exit(0);
-        }
-
-	//printf("Packet sent!!\n");
+      int status = sendto(sock_s, sendbuf, sizeof(sendbuf), 0, (struct sockaddr*)&socket_address, sizeof(struct sockaddr_ll));
+      do_some_task(260000);
+     
+      if(status < 0) {
+          printf("Failed\n")
+          exit(0);
+      }
 }
