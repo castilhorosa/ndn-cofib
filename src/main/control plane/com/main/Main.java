@@ -537,7 +537,7 @@ public class Main {
 
     public static void error() {
         System.out.println("Syntax error. Use the following parameters: ");
-        System.out.println("fantnet -f <[-c] | [-l] | [-e] | [-t] | [-r] | [-p] [-P]> [--input <dataset_file>] [<--output> <file>] [-n] [--pps] [--duration]");
+        System.out.println("ndn-cofib -f <[-c] | [-l] | [-e] | [-t] | [-r] | [-p] [-P]> [--input <dataset_file>] [<--output> <file>] [-n] [--pps] [--duration]");
         System.out.println("");
         System.out.println("Options: ");
         System.out.println("\t-c: \t Verify if the prefix dataset is canonical.");
